@@ -34,16 +34,15 @@ function prediction = classifyImage (im, train_mat, train_val, pcs)
   % Hint: functia magic_with_pca returneaza o matrice de dimensiunea
   % numarului de imagini din setul de date de antrenament x numarul de
   % componente principale.
-
-  [train_mat, miu, Y, Vk] = magic_with_pca(train_mat, train_val, pcs);
+  [train, miu, Y, Vk] = magic_with_pca(train_mat, pcs);
   
   % TODO: scade din vectorul imagine media fiecarei coloane din train_mat.
-  im = im - miu;
+    im = im(:)' - miu;
   
   % TODO: schimbati baza inmultind cu matricea Vk.
-  im = im * Vk;
+  Y_test = im * Vk;
   
   % TODO: calculati predictia folosindu-va de metoda k nearest neighbour
   % implementata anterior cu k = 5.
-  prediction = KNN(train_val, Y, im, 5)
+  prediction = KNN(train_val, Y, Y_test, 5);
 endfunction

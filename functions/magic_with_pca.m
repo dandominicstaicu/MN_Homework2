@@ -82,7 +82,8 @@ function [train, miu, Y, Vk] = magic_with_pca (train_mat, pcs)
   miu = mean(train_mat, 1);
   
   % Scade media din matricea initiala.
-  train = bsxfun(@minus, train_mat, miu);
+%   train = bsxfun(@minus, train_mat, miu);
+train = train_mat - miu;
   
   % Calculeaza matricea de covarianta.
   cov_matrix = train' * train / (m - 1);
