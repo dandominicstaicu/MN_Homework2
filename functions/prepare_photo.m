@@ -23,20 +23,19 @@
 ## Created: 2021-09-08
 
 function sir = prepare_photo (im)
-  %initializare sirul final.
-  sir = zeros (1, 784);
+	% init the final vector.
+  	sir = zeros (1, 784);
   
-  % TODO: inverseaza pixelii imaginii im.
+	% invert the pixel values of the image.
 
-  % Get the maximum pixel intensity value.
-  max_intensity = max(im(:));
+  	% get the maximum pixel intensity value.
+ 	max_intensity = max(im(:));
 
-	% Invert the pixel values of the image.
+	% invert the pixel values of the image.
     im = max_intensity - im;
 
-  % TODO: transpune imaginea, iar apoi transforma imaginea intr-un vector linie.
-  % HINT: functia reshape
-  im = reshape (im', 1, []);
+	% transpose the image and transform it into a line vector using reshape
+ 	im = reshape (im', 1, []);
 
-  sir = im;
+	sir = im;
 endfunction

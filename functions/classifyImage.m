@@ -23,26 +23,22 @@
 ## Created: 2021-09-08
 
 function prediction = classifyImage (im, train_mat, train_val, pcs)
-  % initializare predictie.
-  prediction = -1;
+	% init the prediction
+  	prediction = -1;
   
-  % TODO: cast im la double.
-  im = double(im);
+  	% cast im to double
+  	im = double(im);
   
-  % TODO: aplica functia magic_with_pca setului de date de antrenament.
+	% apply magic_with_pca to the train_mat
+  	[train, miu, Y, Vk] = magic_with_pca(train_mat, pcs);
 
-  % Hint: functia magic_with_pca returneaza o matrice de dimensiunea
-  % numarului de imagini din setul de date de antrenament x numarul de
-  % componente principale.
-  [train, miu, Y, Vk] = magic_with_pca(train_mat, pcs);
-  
-  % TODO: scade din vectorul imagine media fiecarei coloane din train_mat.
+	% substract from the image vector the mean of the train_mat
     im = im(:)' - miu;
   
-  % TODO: schimbati baza inmultind cu matricea Vk.
-  Y_test = im * Vk;
+	% change the basis of the image vector by multiplying it with Vk
+  	Y_test = im * Vk;
   
-  % TODO: calculati predictia folosindu-va de metoda k nearest neighbour
-  % implementata anterior cu k = 5.
-  prediction = KNN(train_val, Y, Y_test, 5);
+	% calculate the prediction using the k nearest neighbour method
+	% implemented previously with k = 5.
+  	prediction = KNN(train_val, Y, Y_test, 5);
 endfunction

@@ -23,59 +23,54 @@
 ## Created: 2021-09-06
 
 function new_X = task3 (photo, pcs)
-  [m, n] = size (photo);
+  	[m, n] = size (photo);
   
-  % initializare matrice finala.
-  new_X = zeros (m, n);
+  	% init final matrix
+  	new_X = zeros (m, n);
   
-  % cast photo la double.
-  photo = double (photo);
+  	% cast photo to double
+  	photo = double (photo);
+
+	% normalize the photo matrix by subtracting the mean of each row.
+	mu = mean(photo, 2); % mean of every row
+	photo = photo - mu; % substract the mean of every row from every row
   
-  % calculeaza media fiecarui rand al matricii.
-  mu = mean (photo, 2);
-  
-  
-  % normalizeaza matricea initiala scazand din ea media fiecarui rand.
-	photo = photo - mu;
-  
-  % TODO: calculeaza matricea de covarianta.
-  covar = (photo * photo') / (n - 1); % covar = cov (photo'); 
-  
-  % TODO: calculeaza vectorii si valorile proprii ale matricei de covarianta.
-  % HINT: functia eig
-  
+	% calculate the covariance matrix
+  	covar = (photo * photo') / (n - 1); % covar = cov (photo'); 
+
+    % calculate the eigenvalues and eigenvectors of the covariance matrix
+	% eig returns a diagonal matrix D of eigenvalues and a full matrix V whose
+	% columns are the corresponding eigenvectors so that covar * V = V * D.
+	% eig returns the eigenvectors in the columns of V.
+	% eig returns the eigenvalues in a diagonal matrix D.
+	% eig sorts the eigenvalues in ascending order.
 	[V, D] = eig (covar);
 
-  % TODO: ordoneaza descrescator valorile proprii si creaza o matrice V
-  % formata din vectorii proprii asezati pe coloane, astfel incat prima coloana
-  % sa fie vectorul propriu corespunzator celei mai mari valori proprii si
-  % asa mai departe.
-  
+	% sort the eigenvalues in descending order
 	[D, idx] = sort (diag (D), 'descend');
+
+	% create a matrix V formed from the eigenvectors placed on columns
+	% so that the first column is the eigenvector corresponding to the largest
+	% eigenvalue and so on.
 	V = V(:, idx);
 
-  % TODO: pastreaza doar primele pcs coloane
-  % OBS: primele coloane din V reprezinta componentele principale si
-  % pastrandu-le doar pe cele mai importante obtinem astfel o compresie buna
-  % a datelor. Cu cat crestem numarul de componente principale claritatea
-  % imaginii creste, dar de la un numar incolo diferenta nu poate fi sesizata
-  % de ochiul uman asa ca pot fi eliminate.
-
+	% keep only the first pcs columns
+	% OBS: the first columns of V represent the main components and
+	% keeping only the most important ones we get a good compression
+	% of the data. The more principal components we keep the better the
+	% image quality, but after a certain number the difference can't be
+	% noticed by the human eye so they can be eliminated.
 	V = V(:, 1:pcs);
-  
-  % TODO: creaza matricea Y schimband baza matricii initiale.
 
+	% create the new matrix Y by changing the basis of the initial matrix
 	Y = V' * photo;
-  
-  % TODO: calculeaza matricea new_X care este o aproximatie a matricii initiale
 
+	% calculate the new matrix X by changing the basis of the matrix Y.
 	new_X = V * Y + mu;
-  
-  % TODO: aduna media randurilor scazuta anterior.
 
+	% sum the mean of each row to the new matrix X.
 	new_X = new_X + mu;
 
-  % TODO: transforma matricea in uint8 pentru a fi o imagine valida.
-
+	% transform the matrix into uint8 to be a valid image.
 	new_X = uint8 (new_X);
 endfunction

@@ -73,35 +73,39 @@
 % endfunction
 
 function [train, miu, Y, Vk] = magic_with_pca (train_mat, pcs)
-  [m, n] = size (train_mat);
+  	[m, n] = size (train_mat); % m = lines, n = columns
   
-  % Cast train_mat la double.
-  train_mat = double(train_mat);
+  	% Cast train_mat to double
+  	train_mat = double(train_mat);
+
+	% calculate the mean of each column
+  	miu = mean(train_mat, 1);
   
-  % Calculeaza media fiecarei coloane a matricii.
-  miu = mean(train_mat, 1);
+	% subtract the mean from each column of the matrix
+	train = train_mat - miu;
+
+	% calculate the covariance matrix
+  	cov_matrix = train' * train / (m - 1);
   
-  % Scade media din matricea initiala.
-%   train = bsxfun(@minus, train_mat, miu);
-train = train_mat - miu;
+	% calculate the eigenvectors and eigenvalues of the covariance matrix
+  	[V, D] = eig(cov_matrix);
+
+	% Sort the eigenvalues in descending order
+  	[lambda, ind] = sort(diag(D), 'descend');
+
+	% create a matrix V
+	% formed from the eigenvectors placed in columns, so that the first column
+	% to be the eigenvector corresponding to the largest eigenvalue and
+	% so on.
+  	V = V(:, ind);
   
-  % Calculeaza matricea de covarianta.
-  cov_matrix = train' * train / (m - 1);
-  
-  % Calculeaza vectorii si valorile proprii ale matricii de covarianta.
-  [V, D] = eig(cov_matrix);
-  
-  % Ordoneaza descrescator valorile proprii si creaza o matrice V
-  [lambda, ind] = sort(diag(D), 'descend');
-  V = V(:, ind);
-  
-  % Pastreaza doar primele pcs coloane din matricea obtinuta anterior.
-  Vk = V(:, 1:pcs);
-  
-  % Creaza matricea Y schimband baza matricii initiale.
-  Y = train * Vk;
-  
-  % Calculeaza matricea train care este o aproximatie a matricii initiale
-  % folosindu-va de matricea Vk calculata anterior
-  train = Y * Vk';
+	% keep only the first pcs columns from the previously obtained matrix.
+  	Vk = V(:, 1:pcs);
+
+	% create the Y matrix by changing the base of the initial matrix.
+  	Y = train * Vk;
+
+	% calculate the train matrix which is an approximation of the initial matrix
+	% using the previously calculated Vk matrix
+  	train = Y * Vk';
 endfunction

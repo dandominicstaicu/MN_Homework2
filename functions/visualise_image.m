@@ -23,20 +23,18 @@
 ## Created: 2021-09-10
 
 function im = visualise_image (train_mat, number)
-  % initializare matrice finala.
-  im = zeros (28, 28);
+  	% init the final matrix
+  	im = zeros (28, 28);
   
-  % TODO: citeste din matricea de antrenament linia cu numarul number.
-  line = train_mat(number, :);
+  	% read the line with the number number from the train_mat matrix
+  	line = train_mat(number, :);
 	
+	% transform the line into a 28x28 matrix and transpose it using reshape
+  	im = reshape(line, 28, 28)';
   
-  % TODO: transforma linia citita intr-o matrice 28x28 care trebuie apoi
-  % transpusa.
-  % HINT: functia reshape
-  im = reshape(line, 28, 28)';
+	% transform the matrix into a uint8 matrix to be a valid image
+  	im = uint8(im);
   
-  % TODO: transforma matricea in uint8 pentru a fi o imagine valida.
-  im = uint8(im);
-  
-  imshow (im)
+	% show the image
+  	% imshow (im)
 endfunction

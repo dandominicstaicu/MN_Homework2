@@ -23,24 +23,22 @@
 ## Created: 2021-09-07
 
 function [train_mat, train_val] = prepare_data (name, no_train_images)
-  n = 784;
+  	n = 784;
+
+	% initialize train_mat
+  	train_mat = zeros (no_train_images, n);
+
+	% init train_val
+  	train_val = zeros (1, no_train_images);
+
+	% load data from the given table as argument using load
+  	data = load(name);
+
+	% save in train_mat the first no_train_images lines from the training
+	% images table
+  	train_mat = data.trainX(1 : no_train_images, :);
   
-  % initializare train_mat.
-  train_mat = zeros (no_train_images, n);
-  
-  %initializare train_val.
-  train_val = zeros (1, no_train_images);
-  
-  % TODO: incarca datele din tabelul primit ca argument.
-  % HINT: functia load
-  data = load(name);
-  
-  
-  % TODO: salveaza in matricea train_mat primele no_train_images linii din
-  % tabelul de imagini de antrenament.
-  train_mat = data.trainX(1:no_train_images, :);
-  
-  % TODO: salveaza in vectorul train_val primele no_train_images valori ale
-  % vectorului de etichete.
-	train_val = data.trainY(1,1:no_train_images);
+	% save in train_val the first no_train_images values from the training
+	% labels table
+	train_val = data.trainY(1, 1 : no_train_images);
 endfunction

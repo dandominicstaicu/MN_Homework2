@@ -23,38 +23,25 @@
 ## Created: 2021-08-09
 
 function prediction = KNN (labels, Y, test, k)
-  % initializeaza prediction
-  prediction = -1;
+  	% init prediction
+  	prediction = -1;
   
-  % initializeaza distantele
-  [m, n] = size (Y);
-  distance = zeros (m, 1);
+  	% init distance
+  	[m, n] = size (Y); % m = count of images, n = cnt of pixels per image
+  	distance = zeros (m, 1);
   
-  % TODO: pentru fiecare rand calculati distanta Euclidiana dintre acesta si
-  % vectorul de test primit ca argument.
+	% for each row calculate the Euclidian distance between it and the test vector
+  	for i = 1 : m
+		% Euclidian distance = sqrt (sum ( (Y(i, :) - test) .^ 2))
+		distance(i) = sqrt(sum((Y(i, :) - test) .^ 2));
+  	endfor
 
+	% sort increasing the distances and keep in a vector the first k values
+	% that represent the true values of these images that proved to be the closest.
+	[~, aux] = sort (distance);
+	closest_labels = labels(aux(1 : k));
 
-  % TODO ????
-  % Atentie! functia Euclidiana primeste ca argumente DOUA matrice, nu un
-  % vector si o matrice.
-  % Hint: folositi functia bsxfun pentru a calcula diferenta patratica a
-  % tuturor elementelor.
-
-  for i = 1 : m
-	distance(i) = sqrt(sum((Y(i, :) - test) .^ 2));
-  endfor
-  
-  
-  % TODO: ordonati crescator distantele si tineti minte intr-un vector primele
-  % k valori care reprezinta valorile adevarate ale acestor imagini care s-au
-  % dovedit a fi cele mai apropiate.
-  % Hint [~,aux] = sort (...)
-
-	  [~, aux] = sort (distance);
-	  closest_labels = labels(aux(1:k));
-  
-  % TODO: calculati predictia ca mediana celor k valori cele mai apropiate.
-
-  % folositi functia median.
-  prediction = median (closest_labels); % foloind functia median
+	% calculate the prediction as the median of the k closest values
+	% use median instead of mean because we have discrete values
+  	prediction = median (closest_labels);
 endfunction

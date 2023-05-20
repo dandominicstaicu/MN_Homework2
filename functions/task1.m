@@ -27,24 +27,25 @@
 function new_X = task1 (photo, k)
   [m, n] = size (photo);
   
-  % initializare matrice finala.
+  % init final matrix
   new_X = zeros (m, n);
   
-  % TODO: cast photo la double.
+  % cast photo to double
   photo = double(photo);
   
-  % TODO: aplica algoritmul SVD asupra photo.
-  [U, S, V] = svd(photo); % U are dimensiunea m x m, S are dimensiunea m x n, V are dimensiunea n x n
+  % apply SVD on photo
+  % U has size m x m, S has size m x n, V has size n x n
+  [U, S, V] = svd(photo); 
   
-  % TODO: calculeaza noile matrici reduse U, S si V.
-  U_k = U(:, 1 : k); % U_k are dimensiunea m x k
-  S_k = S(1 : k, 1 : k); % S_k are dimensiunea k x k
-  V_k = V(:, 1 : k); % V_k are dimensiunea n x k
+  % calculate new matrices U_k, S_k, V_k
+  U_k = U(:, 1 : k); % U_k has size m x k
+  S_k = S(1 : k, 1 : k); % S_k has size k x k
+  V_k = V(:, 1 : k); % V_k has size n x k
   
-  % TODO: calculeaza new_X care este aproximarea matricii initiale photo,
-  % folosindu-va de matricile calculate anterior.
+  % calculate new_X which is the approximation of the initial photo matrix,
+  % using the previously calculated matrices.
    new_X = U_k * S_k * V_k';
   
-  % TODO: transforma matricea in uint8 pentru a fi o imagine valida.
+  % transform new_X to uint8 type in order to create a valid image
   new_X = uint8(new_X);
 endfunction

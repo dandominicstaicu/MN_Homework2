@@ -23,33 +23,34 @@
 ## Created: 2023-02-28
 
 function new_X = task2 (photo, pcs)
-  [m n] = size(photo);
+  	[m n] = size(photo);
   
-  % initializare matrice finala.
-  new_X = zeros(m, n);
+  	% init final matrix
+  	new_X = zeros(m, n);
   
-  % cast photo la double.
+  	% cast photo to double
 	photo = double(photo);
 
-  % normalizeaza matricea initiala scazand din ea media fiecarui rand.
-	mu = mean(photo, 2); % media fiecarui rand
-	photo = photo - mu; % scazuta din fiecare rand
 
-  % construieste matricea Z.
+  	% normalize the photo matrix by subtracting the mean of each row.
+	mu = mean(photo, 2); % mean of every row
+	photo = photo - mu; % substract the mean of every row from every row
+
+  	% create the Z matrix
 	z = photo' / sqrt(n - 1);
   
-  % calculeaza matricile U, S si V din SVD aplicat matricii Z
+  	% calculate matrix U, S, V from the SVD of Z
 	[U S V] = svd(z);
   
-  % construieste matricea W din primele pcs coloane ale lui V
-  W = V(:, 1 : pcs);
+	% create the W matrix from the first pcs columns of V
+  	W = V(:, 1 : pcs);
   
-  % cacluleaza matricea Y
+  	% calculate matrix Y
 	Y = W' * photo;
   
-  % aproximeaza matricea initiala
+  	% approximate the photo matrix
 	new_X = W * Y + mu;
   
-  % transforma matricea in uint8 pentru a fi o imagine valida.
+  	% transform the matrix to uint8 type for displaying a valid image
 	new_X = uint8(new_X);	
 endfunction
